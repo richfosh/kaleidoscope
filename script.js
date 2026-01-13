@@ -34,28 +34,30 @@ class Bead {
         this.spin = (Math.random() - 0.5) * 0.1;
     }
     update() {
-    this.vx += gravity.x;
-    this.vy += gravity.y;
-    
-    // --- ADD SPEED LIMIT HERE ---
-    const speedLimit = 10;
-    this.vx = Math.max(-speedLimit, Math.min(speedLimit, this.vx));
-    this.vy = Math.max(-speedLimit, Math.min(speedLimit, this.vy));
-    
-    this.vx *= this.friction;
-    this.vy *= this.friction;
+        // Apply gravity
+        this.vx += gravity.x;
+        this.vy += gravity.y;
+        
+        // HIGHER FRICTION: Acts like the beads are in thick oil/water
+        // Change from 0.98 to 0.92
+        this.vx *= 0.92;
+        this.vy *= 0.92;
+        
         this.x += this.vx;
         this.y += this.vy;
-        this.angle += this.spin;
+        this.angle += this.spin + (this.vx * 0.02);
 
+        // BOUNDARY CHECK: Ensure they stay within the 450px buffer zone
         const dist = Math.sqrt(this.x * this.x + this.y * this.y);
-        const limit = 450; 
+        const limit = 400; 
         if (dist > limit) {
             const angle = Math.atan2(this.y, this.x);
+            // Push bead back inside the limit
             this.x = Math.cos(angle) * limit;
             this.y = Math.sin(angle) * limit;
-            this.vx *= -0.5;
-            this.vy *= -0.5;
+            // Dampen the bounce significantly
+            this.vx *= -0.2;
+            this.vy *= -0.2;
         }
     }
     draw(c) {
