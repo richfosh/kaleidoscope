@@ -3,7 +3,7 @@ const ctx = canvas.getContext('2d');
 const startBtn = document.getElementById('startBtn');
 const overlay = document.getElementById('overlay');
 
-// Buffer to hold the "Master Beads"
+// ** Buffer to hold the "Master Beads" **
 const buffer = document.createElement('canvas');
 const bCtx = buffer.getContext('2d');
 
