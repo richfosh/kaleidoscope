@@ -34,10 +34,16 @@ class Bead {
         this.spin = (Math.random() - 0.5) * 0.1;
     }
     update() {
-        this.vx += gravity.x;
-        this.vy += gravity.y;
-        this.vx *= this.friction;
-        this.vy *= this.friction;
+    this.vx += gravity.x;
+    this.vy += gravity.y;
+    
+    // --- ADD SPEED LIMIT HERE ---
+    const speedLimit = 10;
+    this.vx = Math.max(-speedLimit, Math.min(speedLimit, this.vx));
+    this.vy = Math.max(-speedLimit, Math.min(speedLimit, this.vy));
+    
+    this.vx *= this.friction;
+    this.vy *= this.friction;
         this.x += this.vx;
         this.y += this.vy;
         this.angle += this.spin;
@@ -138,8 +144,8 @@ startBtn.addEventListener('click', () => {
         DeviceOrientationEvent.requestPermission().then(res => {
             if (res === 'granted') {
                 window.addEventListener('deviceorientation', (e) => {
-                    gravity.x = e.gamma * 0.1;
-                    gravity.y = e.beta * 0.1;
+                gravity.x = (e.gamma || 0) * 0.005; 
+				gravity.y = (e.beta || 0) * 0.005;
                 });
             }
         });
